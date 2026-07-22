@@ -1,0 +1,9 @@
+[
+  {
+    "id": "volcano",
+    "name": "火山ダンジョン",
+    "element": "fire",
+    "difficulties": ["normal", "hard", "nightmare"],
+    "floorsPerDifficulty": 10
+  }
+]

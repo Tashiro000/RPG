@@ -27,6 +27,7 @@ export function createNewSave(seed) {
     position: null,   // 今後、現在地(ダンジョン/階層等)を入れる
     inventory: {},    // 今後、所持アイテム・武器を入れる
     currency: { g: 0, j: 0 },
+    dungeonProgress: {},
   };
   writeSave(save);
   return save;

@@ -311,3 +311,97 @@ html, body {
 .footer-btn:focus-visible {
   color: var(--gold-soft);
 }
+
+/* ============================
+   Dungeon screens
+   ============================ */
+
+.dungeon-list-screen,
+.dungeon-screen {
+  min-height: 100vh;
+  background: var(--bg-void);
+  color: var(--parchment);
+  font-family: var(--font-body);
+  padding: 1.2rem 1.4rem;
+}
+
+.dungeon-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--bg-stone);
+  padding-bottom: 0.8rem;
+  margin-bottom: 1.2rem;
+}
+
+.dungeon-title {
+  font-family: var(--font-display);
+  color: var(--gold-soft);
+  font-size: 1.3rem;
+  margin: 0;
+}
+
+.dungeon-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.9rem;
+}
+
+.difficulty-tabs {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 1.2rem;
+}
+
+.difficulty-tab {
+  background: var(--bg-stone);
+  border: 1px solid rgba(201, 162, 39, 0.2);
+  color: var(--mist);
+  font-family: var(--font-utility);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+}
+
+.difficulty-tab.active {
+  color: var(--gold-soft);
+  border-color: var(--gold);
+}
+
+.difficulty-tab:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.floor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  gap: 0.6rem;
+}
+
+.floor-card {
+  background: var(--bg-stone);
+  border: 1px solid rgba(201, 162, 39, 0.2);
+  color: var(--parchment);
+  font-family: var(--font-utility);
+  font-size: 0.85rem;
+  padding: 0.8rem 0.4rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.floor-card.cleared {
+  color: var(--gold-soft);
+  border-color: var(--gold);
+}
+
+.floor-card:hover:not(:disabled),
+.floor-card:focus-visible {
+  border-color: var(--ember);
+}
+
+.floor-card:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
