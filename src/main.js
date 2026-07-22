@@ -1,22 +1,31 @@
 import { createTitleScreen } from "./ui/titleScreen.js";
+import { hasSave, createNewSave, loadSave, deleteSave } from "./save/saveManager.js";
+import { generateSeed } from "./utils/worldSeed.js";
 
 const app = document.getElementById("app");
 
 createTitleScreen(app, {
   onNewGame: () => {
-    // 例: ワールドシード生成 → キャラメイキング画面へ遷移
-    console.log("New Game clicked");
+    if (hasSave()) {
+      // 既にセーブがある場合の上書き確認は、後で確認ダイアログUIに置き換える
+      const overwrite = confirm("既存のセーブデータを上書きしますか？");
+      if (!overwrite) return;
+      deleteSave();
+    }
+    const seed = generateSeed();
+    const save = createNewSave(seed);
+    console.log("New Game created:", save);
+    // 今後: キャラメイキング画面 → メイン画面へ遷移
   },
   onContinue: () => {
-    // 例: セーブデータ読み込み → メイン画面へ遷移
-    console.log("Continue clicked");
+    const save = loadSave();
+    console.log("Continue with save:", save);
+    // 今後: メイン画面へ遷移し、saveの内容を復元
   },
   onSettings: () => {
-    // 例: 設定画面（音量, キー設定等）を表示
     console.log("Settings clicked");
   },
   onExit: () => {
-    // ブラウザ上ではタブを閉じられないため確認ダイアログ等に留める想定
     console.log("Exit clicked");
   },
 });

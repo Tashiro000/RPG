@@ -1,25 +1,16 @@
 // titleScreen.js
 // タイトル画面の生成とイベント処理を担当するモジュール。
-// 実プロジェクトでは src/screens/title/titleScreen.js に配置し、
-// src/main.js から createTitleScreen() を呼び出す想定。
+
+import { hasSave } from "../save/saveManager.js";
 
 const GAME_TITLE = "Ember & Ash";
 
 /**
- * セーブデータの有無を判定する。
- * 実装時は save.json / IndexedDB 等、実際のセーブシステムに置き換える。
- */
-function hasSaveData() {
-  return localStorage.getItem("rpg_save") !== null;
-}
-
-/**
  * バージョン情報を取得する。
- * 実装時は version.json 等、データ駆動の設定ファイルから読み込む想定。
  */
 async function loadVersion() {
   try {
-    const res = await fetch("./version.json");
+    const res = await fetch("/version.json");
     if (!res.ok) throw new Error("version.json not found");
     const data = await res.json();
     return data.version ?? "0.0.0";
@@ -46,7 +37,7 @@ function createEmbers(count = 22) {
  * @param {{onNewGame?: Function, onContinue?: Function, onSettings?: Function, onExit?: Function}} handlers
  */
 export async function createTitleScreen(container, handlers = {}) {
-  const canContinue = hasSaveData();
+  const canContinue = hasSave();
   const version = await loadVersion();
 
   container.innerHTML = `
