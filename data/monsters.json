@@ -1,0 +1,22 @@
+{
+  "mob_1_1": {
+    "id": "mob_1_1",
+    "hp": 30,
+    "maxHp": 30,
+    "atk": 5,
+    "def": 1,
+    "element": "fire",
+    "exp": 10,
+    "gold": 15
+  },
+  "boss_1_10": {
+    "id": "boss_1_10",
+    "hp": 150,
+    "maxHp": 150,
+    "atk": 15,
+    "def": 5,
+    "element": "fire",
+    "exp": 100,
+    "gold": 200
+  }
+}

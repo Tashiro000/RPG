@@ -2,6 +2,7 @@ import { createTitleScreen } from "./ui/titleScreen.js";
 import { createMainScreen } from "./ui/mainScreen.js";
 import { createDungeonListScreen } from "./ui/dungeonListScreen.js";
 import { createDungeonScreen } from "./ui/dungeonScreen.js";
+import { createBattleScreen } from "./ui/battleScreen.js"; // 戦闘画面をインポート
 import { hasSave, createNewSave, loadSave, deleteSave, writeSave } from "./save/saveManager.js";
 import { clearFloor } from "./dungeon/dungeonManager.js";
 import { generateSeed } from "./utils/worldSeed.js";
@@ -56,14 +57,24 @@ function showDungeon(save, dungeonId) {
   createDungeonScreen(app, save, dungeonId, {
     onBack: () => showDungeonList(save),
     onEnterFloor: ({ dungeonId, difficulty, floorNumber }) => {
-      // TODO: 戦闘システム実装後はここでバトル画面へ遷移し、勝利時にclearFloorを呼ぶ。
-      // 現状は戦闘が無いため、進行確認用に仮クリアする。
-      console.log(`(仮) ${difficulty} ${floorNumber}階 クリア`);
-      clearFloor(save, dungeonId, difficulty, floorNumber);
-      writeSave(save);
-      showDungeon(save, dungeonId);
+      // 階層カードクリック時に戦闘画面へ遷移
+      showBattle(save, dungeonId, difficulty, floorNumber);
     },
   });
 }
 
+// 戦闘画面の表示処理
+function showBattle(save, dungeonId, difficulty, floorNumber) {
+  createBattleScreen(app, save, { dungeonId, difficulty, floorNumber }, {
+    onBack: () => showDungeon(save, dungeonId),
+    onVictory: ({ dungeonId, difficulty, floorNumber }) => {
+      // 勝利時に進行度を更新して保存し、ダンジョン画面に戻る
+      clearFloor(save, dungeonId, difficulty, floorNumber);
+      writeSave(save);
+      showDungeon(save, dungeonId);
+    }
+  });
+}
+
+// アプリの開始
 showTitle();

@@ -405,3 +405,92 @@ html, body {
   opacity: 0.35;
   cursor: not-allowed;
 }
+
+/* ============================
+   Battle screen
+   ============================ */
+
+.battle-screen {
+  min-height: 100vh;
+  background: var(--bg-void);
+  color: var(--parchment); /* テキスト色を羊皮紙色（明るい色）に明示 */
+  font-family: var(--font-body);
+  padding: 1.2rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.battle-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--bg-stone);
+  padding-bottom: 0.8rem;
+  margin-bottom: 1.4rem;
+}
+
+.battle-header h3 {
+  font-family: var(--font-display);
+  color: var(--gold-soft);
+  margin: 0;
+}
+
+/* 敵カード部分 */
+#enemy-card {
+  background: var(--bg-stone);
+  border: 1px solid rgba(201, 162, 39, 0.3);
+  border-radius: 4px;
+  padding: 1.2rem;
+  margin-bottom: 1.5rem;
+  color: var(--parchment); /* カード内の文字色を羊皮紙色に */
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#enemy-card:hover {
+  border-color: var(--gold);
+  box-shadow: 0 0 10px rgba(201, 162, 39, 0.15);
+}
+
+#enemy-card h4 {
+  font-family: var(--font-display);
+  color: var(--gold-soft);
+  margin-top: 0;
+  margin-bottom: 0.6rem;
+}
+
+#enemy-card p {
+  margin: 0.4rem 0;
+}
+
+/* 敵の詳細情報モーダル/エリア */
+#enemy-detail {
+  border-top: 1px solid rgba(201, 162, 39, 0.2);
+  margin-top: 1rem;
+  padding-top: 0.8rem;
+  color: var(--parchment);
+}
+
+/* 戦闘ボタンエリア */
+.battle-actions {
+  display: flex;
+  gap: 0.8rem;
+}
+
+.battle-actions button,
+#escape-btn {
+  background: var(--bg-stone);
+  border: 1px solid rgba(201, 162, 39, 0.3);
+  color: var(--parchment);
+  font-family: var(--font-utility);
+  font-size: 0.9rem;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.battle-actions button:hover,
+#escape-btn:hover {
+  border-color: var(--ember);
+  color: var(--gold-soft);
+}
