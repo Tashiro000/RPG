@@ -259,12 +259,14 @@ html, body {
   color: var(--parchment);
 }
 
+/* PC（標準）では1行に4列並べることで、1段目に4個・2段目に3個の配置を実現 */
 .location-grid {
   flex: 1;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 0.9rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.2rem;
   align-content: start;
+  width: 100%;
 }
 
 .location-card {
@@ -272,22 +274,46 @@ html, body {
   border: 1px solid rgba(201, 162, 39, 0.25);
   color: var(--parchment);
   font-family: var(--font-display);
-  font-size: 1rem;
-  letter-spacing: 0.04em;
-  padding: 1.6rem 1rem;
+  font-size: 1.2rem;       /* 文字サイズを大きく設定 */
+  line-height: 1.4;        /* 改行時の行間バランスを最適化 */
+  letter-spacing: 0.05em;
+  padding: 1.8rem 1.2rem;  /* 上下にゆとりを持たせたパディング */
+  min-height: 100px;       /* 2行入っても収まる十分な高さ */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   cursor: pointer;
-  transition: border-color 0.2s ease, color 0.2s ease;
+  transition: border-color 0.2s ease, color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
 }
 
 .location-card:hover,
 .location-card:focus-visible {
   border-color: var(--gold);
   color: var(--gold-soft);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
 }
 
 .location-card:focus-visible {
   outline: 1px solid var(--gold);
   outline-offset: 2px;
+}
+
+/* PC（幅769px以上）でのみ改行を有効化 */
+.pc-only {
+  display: inline;
+}
+
+/* スマホなど画面幅が狭い場合（768px以下）のレイアウト調整 */
+@media (max-width: 768px) {
+  .location-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2列で折り返す */
+  }
+  
+  .pc-only {
+    display: none; /* 改行タグを消して1行化 */
+  }
 }
 
 .main-footer {
@@ -413,7 +439,7 @@ html, body {
 .battle-screen {
   min-height: 100vh;
   background: var(--bg-void);
-  color: var(--parchment); /* テキスト色を羊皮紙色（明るい色）に明示 */
+  color: var(--parchment);
   font-family: var(--font-body);
   padding: 1.2rem 1.4rem;
   display: flex;
@@ -442,7 +468,7 @@ html, body {
   border-radius: 4px;
   padding: 1.2rem;
   margin-bottom: 1.5rem;
-  color: var(--parchment); /* カード内の文字色を羊皮紙色に */
+  color: var(--parchment);
   cursor: pointer;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
@@ -493,4 +519,62 @@ html, body {
 #escape-btn:hover {
   border-color: var(--ember);
   color: var(--gold-soft);
+}
+
+/* 装備・解除ボタンの統一スタイル */
+.equip-btn, .unequip-btn {
+  background: var(--bg-stone, #2b261f);
+  color: var(--gold-soft, #c9a227);
+  border: 1px solid rgba(201, 162, 39, 0.5);
+  border-radius: 4px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.equip-btn:hover {
+  background: rgba(201, 162, 39, 0.2);
+  border-color: var(--gold-soft, #c9a227);
+  box-shadow: 0 0 8px rgba(201, 162, 39, 0.3);
+}
+
+.unequip-btn {
+  background: rgba(180, 50, 50, 0.2);
+  color: #ff8888;
+  border-color: rgba(255, 100, 100, 0.4);
+}
+
+.unequip-btn:hover {
+  background: rgba(180, 50, 50, 0.4);
+  border-color: #ff8888;
+  box-shadow: 0 0 8px rgba(255, 100, 100, 0.3);
+}
+
+/* ============================
+   Toast Notification
+   ============================ */
+
+.toast-notification {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--bg-stone);
+  color: var(--gold-soft);
+  border: 1px solid var(--gold);
+  padding: 0.6rem 1.4rem;
+  border-radius: 4px;
+  font-family: var(--font-utility);
+  font-size: 0.9rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.toast-notification.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }

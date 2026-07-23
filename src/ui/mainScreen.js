@@ -1,11 +1,15 @@
-// mainScreen.js
-// タイトルからNew Game/Continueで遷移してくるハブ画面。
-// 現時点では各コンテンツ(ダンジョン/鍛冶屋/ガチャ/カジノ/アイテム袋)は未実装のため、
-// ボタンはhandlers経由でコールバックを呼ぶだけの骨組みとする。
+// src/ui/mainScreen.js
+
+import { createStatusScreen } from "./statusScreen.js";
 
 const LOCATIONS = [
+  // --- 1列目 (4つ：ステータスボタンを除外) ---
   { action: "dungeon", label: "ダンジョン" },
-  { action: "inventory", label: "アイテム袋" },
+  { action: "inventory", label: "装備・<br class=\"pc-only\">インベントリ" },
+  { action: "consumables", label: "道具箱<br class=\"pc-only\">（消耗品）" },
+  { action: "shop", label: "道具屋<br class=\"pc-only\">（ショップ）" },
+  
+  // --- 2列目 (3つ) ---
   { action: "forge", label: "鍛冶屋" },
   { action: "gacha", label: "ガチャ" },
   { action: "casino", label: "カジノ" },
@@ -20,30 +24,32 @@ function renderParty(party) {
     .join("");
 }
 
-/**
- * メイン画面をcontainer内に描画する。
- * @param {HTMLElement} container
- * @param {object} save セーブデータ(saveManager.loadSave/createNewSaveの戻り値)
- * @param {object} handlers 各ボタンのコールバック
- *   onDungeon, onInventory, onForge, onGacha, onCasino, onSave, onTitle
- */
 export function createMainScreen(container, save, handlers = {}) {
-  const { currency, party } = save;
+  const gold = save?.player?.gold ?? save?.currency?.g ?? 0;
+  const gem = save?.player?.gem ?? save?.currency?.j ?? 0;
+  const party = save?.party || [];
+  const level = save?.player?.level || 1; // プレイヤーのレベルを取得
 
   container.innerHTML = `
     <div class="main-screen">
-      <header class="main-header">
+      <header class="main-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+        <!-- 左上：ステータスを開けるレベル表示・ボタン -->
+        <div class="header-status-area">
+          <button type="button" id="btn-header-status" class="footer-btn" style="padding: 0.3rem 0.8rem; font-size: 0.9rem; background: var(--bg-stone); border-color: var(--gold-soft); color: var(--gold-soft);">
+            Lv. ${level} ステータス
+          </button>
+        </div>
+
         <div class="currency">
-          <span class="currency-item gold">G ${currency?.g ?? 0}</span>
-          <span class="currency-item gem">J ${currency?.j ?? 0}</span>
+          <span class="currency-item gold">G ${gold}</span>
+          <span class="currency-item gem">J ${gem}</span>
         </div>
         <div class="party-summary">${renderParty(party)}</div>
       </header>
 
       <nav class="location-grid" role="menu">
         ${LOCATIONS.map(
-          (loc) =>
-            `<button type="button" class="location-card" data-action="${loc.action}" role="menuitem">${loc.label}</button>`
+          (loc) => `<button type="button" class="location-card" data-action="${loc.action}" role="menuitem">${loc.label}</button>`
         ).join("")}
       </nav>
 
@@ -54,9 +60,22 @@ export function createMainScreen(container, save, handlers = {}) {
     </div>
   `;
 
+  // 左上のステータスボタンのイベント登録
+  const handleStatusOpen = () => {
+    createStatusScreen(container, save, {
+      onBack: () => {
+        createMainScreen(container, save, handlers);
+      }
+    });
+  };
+
+  container.querySelector("#btn-header-status").addEventListener("click", handleStatusOpen);
+
   const actions = {
     dungeon: handlers.onDungeon,
     inventory: handlers.onInventory,
+    consumables: handlers.onConsumables,
+    shop: handlers.onShop,
     forge: handlers.onForge,
     gacha: handlers.onGacha,
     casino: handlers.onCasino,
